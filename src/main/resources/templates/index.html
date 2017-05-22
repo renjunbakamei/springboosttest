@@ -1,0 +1,67 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>报表服务器使用情况</title>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+<link th:href="@{bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
+<link th:href="@{bootstrap/css/bootstrap-theme.min.css}" rel="stylesheet" />
+</head>
+<body>
+<!--<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">访问Model</h3>
+    </div>
+    <div class="panel-body">
+        <span th:text="${singlePerson.name}"></span>
+    </div>
+</div>-->
+<div>
+    <div class="panel panel-primary" style="height: 100%">
+        <div class="panel-heading">
+            <h3 class="panel-title">服务器列表</h3>
+        </div>
+        <div class="panel-body">
+            <table class="table table-striped table-hover" id="dataTable">
+                <thead>
+                <tr>
+                    <th class="hidden-xs" width="100">
+                        服务器id
+                    </th>
+                    <th class="hidden-xs">
+                        服务器ip
+                    </th>
+                    <th class="hidden-xs">
+                        系统端口
+                    </th>
+                    <th class="hidden-xs">
+                        正在执行条数
+                    </th>
+                    <th class="hidden-xs">
+                        服务器状态
+                    </th>
+                </tr>
+                </thead>
+                <tbody  th:if="${not #lists.isEmpty(clients)}">
+                <tr th:each="client:${clients}">
+                    <td><span th:text="${client.systemId}"></span></td>
+                    <td><span th:text="${client.systemIp}"></span></td>
+                    <td><span th:text="${client.systomPort}"></span></td>
+                    <td><span th:text="${client.count}"></span></td>
+                    <td><span th:text="${client.systomStatus}"></span></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!--<script th:src="@{jquery-3.1.1.js}" type="text/javascript"></script>
+<script th:src="@{bootstrap/js/bootstrap.min.js}" type="text/javascript"></script>
+<script th:inline="javascript">
+    var single = [[${singlePerson}]];
+    console.log(single.name+"/"+single.age);
+    function getName(name) {
+        console.log(name);
+    }
+</script>-->
+</body>
+</html>

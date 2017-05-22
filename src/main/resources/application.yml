@@ -1,0 +1,113 @@
+server:
+    port: 8081
+    context-path: #/liuzh/
+    tomcat:
+      uri-encoding: UTF-8
+
+
+druid:
+  url: ${oracle.url}
+  username: ${oracle.username}
+  password: ${oracle.password}
+  initial-size: 1
+  max-active: ${oracle.maxactive}
+  pool-preparedS-stements: true
+  max-open-prepared-statements: 200
+  min-idle: 1
+  max-wait: 60000
+  time-between-evictionRuns-millis: 60000
+  min-evictableIdle-time-millis: 300000
+  validation-query: SELECT 'x'
+  test-while-idle: true
+  test-on-borrow: false
+  test-on-return: false
+  filters: stat
+
+
+spring:
+  profiles:
+    active: dev
+  redis:
+    host:
+    password:
+    port: 6379
+    pool:
+      max-idle: 300
+      min-idle: 50
+      max-active: 600
+      max-wait: 1000
+  value:
+    count: 20
+  http:
+    encoding:
+      force: true
+      charset: utf-8
+      enabled: true
+
+mapper:
+    mappers:
+        - com.jfpal.core.utils.MapperHelper
+    not-empty: false
+#    identity: ORACLE
+
+pagehelper:
+    dialect: com.github.pagehelper.dialect.helper.OracleDialect
+    reasonable: true
+    support-methodsarguments: true
+    offset-as-pageNum: true
+    row-bounds-withCount: true
+    page-size-zero: true
+    params: count=countSql;pageNum=start;pageSize=limit;
+
+mybatis:
+    type-aliases-package: com.jfpal
+    mapper-locations: classpath*:/mybatis/**/*-sqlmapper.xml
+    #config-location: classpath:/mybatis/mybatis-config.xml
+
+#reids配置
+jedis :
+  host : ${redis.host}
+  port : ${redis.port}
+  maxTotal: 100
+  maxIdle: 10
+  maxWaitMillis : 100000
+
+#log
+logging:
+  config: classpath:logback.xml
+  path: /home/weblogic/logs/jf-report-provider
+---
+#测试环境配置
+spring:
+  profiles: dev
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML5
+    encoding: UTF-8
+    charset: ${spring.thymeleaf.encoding}
+    content-type: text/html
+oracle:
+  url:
+  username:
+  password:
+  maxactive: 5
+redis:
+  host:
+  port:
+
+allocate:
+  clientsKey: reportClient
+  affairKey: affairList
+  maxCount: 200000
+  uri: aaa
+  queryUri: /report-server/report/queryThreadCount
+  noticeHost:
+  noticePort: 9696
+  content: 您预约的报表%s已经生成完成,<a href='payjnlsAction/download?file=%s&name=%s'>点击下载 </a>
+  reportUri: /report-server/report/order
+  contentFail: 您预约的报表生成失败，请重新预约
+  rowCount: 10
+
+

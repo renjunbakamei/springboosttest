@@ -1,0 +1,25 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jfpal.report.mapper.ClientMapper">
+
+    <insert id="insertReportClient" parameterType="Client">
+        <![CDATA[
+        INSERT INTO report_client (
+        	system_id ,
+        	system_Ip ,
+        	system_Port,
+        	system_count,
+        	threadCount
+        ) VALUES (
+        	#{systemId},
+        	#{systemIp,jdbcType=VARCHAR},
+        	#{systomPort,jdbcType=VARCHAR},
+        	#{count,jdbcType=DOUBLE},
+        	#{threadCount,jdbcType=VARCHAR}
+        )
+    ]]>
+    </insert>
+
+    <select id="selectSeqReportClient" resultType="Integer">
+        SELECT seq_report_client.Nextval FROM DUAL
+    </select>
+</mapper>

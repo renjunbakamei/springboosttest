@@ -1,0 +1,188 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jfpal.report.mapper.ReportMapper">
+
+    <resultMap id="ReportMap" type="com.jfpal.report.entity.Report">
+        <!-- <result column="delay" jdbcType="VARCHAR" property="delay" javaType="String"/> -->
+        <result column="id" jdbcType="DOUBLE" property="id" javaType="Integer" />
+        <result column="report_name" jdbcType="VARCHAR" property="reportName" javaType="String" />
+        <result column="report_path" jdbcType="VARCHAR" property="reportPath" javaType="String" />
+        <result column="report_sql" jdbcType="VARCHAR" property="sql" javaType="String" />
+        <result column="status" jdbcType="VARCHAR" property="status" javaType="String" />
+        <result column="report_msg" jdbcType="VARCHAR" property="message" javaType="String" />
+        <result column="system_id" jdbcType="VARCHAR" property="systemId" javaType="String" />
+        <result column="report_type" jdbcType="VARCHAR" property="reportType" javaType="String" />
+        <result column="report_level" jdbcType="VARCHAR" property="reportLevel" javaType="String" />
+        <result column="server_url" jdbcType="VARCHAR" property="serverUrl" javaType="String" />
+        <result column="report_count" jdbcType="VARCHAR" property="reportCount" javaType="String" />
+        <result column="report_title" jdbcType="VARCHAR" property="reportTitle" javaType="String" />
+        <result column="create_time" jdbcType="VARCHAR" property="createTime" javaType="String" />
+        <result column="update_time" jdbcType="VARCHAR" property="updateTime" javaType="String" />
+        <result column="report_sheet_name" jdbcType="VARCHAR" property="sheetName" javaType="String" />
+        <result column="userids" jdbcType="VARCHAR" property="userIds" javaType="String" />
+        <result column="reponse_code" jdbcType="VARCHAR" property="reponseCode" javaType="String" />
+        <result column="RESPONSE_CODE_RS" jdbcType="VARCHAR" property="responseCodeReportServer" javaType="String" />
+    </resultMap>
+
+
+    <insert id="insertReportOrder" parameterType="Report">
+        <![CDATA[
+        INSERT INTO report_order (
+        	id ,
+        	report_name ,
+        	report_path,
+        	report_sql,
+        	status,
+        	report_msg,
+        	system_id,
+        	report_type,
+        	report_level,
+        	server_url,
+        	report_count,
+        	report_title,
+        	create_time,
+        	update_time,
+        	report_sheet_name,
+        	userids,
+        	reponse_code
+        ) VALUES (
+        	#{id},
+        	#{reportName,jdbcType=VARCHAR},
+        	#{reportPath,jdbcType=VARCHAR},
+        	#{sql,jdbcType=VARCHAR},
+        	#{status,jdbcType=VARCHAR},
+        	#{message,jdbcType=VARCHAR},
+        	#{systemId,jdbcType=VARCHAR},
+        	#{reportType,jdbcType=VARCHAR},
+        	#{reportLevel,jdbcType=VARCHAR},
+        	#{serverUrl,jdbcType=VARCHAR},
+        	#{reportCount,jdbcType=VARCHAR},
+        	#{reportTitle,jdbcType=VARCHAR},
+        	to_char(sysdate,'yyyymmddhh24miss'),
+        	to_char(sysdate,'yyyymmddhh24miss'),
+        	#{sheetName,jdbcType=VARCHAR},
+        	#{userIds,jdbcType=VARCHAR},
+        	#{reponseCode,jdbcType=VARCHAR}
+        )
+    ]]>
+    </insert>
+
+    <select id="selectSeqReportOrder" resultType="Integer">
+        SELECT SEQ_REPORT_ORDER.Nextval FROM DUAL
+    </select>
+
+    <update id="updateReportOrderById" parameterType="Report">
+        update report_order
+        <set>
+            <if test="reportName != null">
+                report_name = #{reportName} ,
+            </if>
+            <if test="reportPath != null">
+                report_path = #{reportPath} ,
+            </if>
+            <if test="sql != null">
+                report_sql = #{sql} ,
+            </if>
+            <if test="status != null">
+                status = #{status} ,
+            </if>
+            <if test="message != null">
+                report_msg = #{message} ,
+            </if>
+            <if test="systemId != null">
+                system_id = #{systemId} ,
+            </if>
+            <if test="reportType != null">
+                report_type = #{reportType} ,
+            </if>
+            <if test="reportLevel != null">
+                report_level = #{reportLevel} ,
+            </if>
+            <if test="serverUrl != null">
+                server_url = #{serverUrl} ,
+            </if>
+            <if test="reportTitle != null">
+                report_title = #{reportTitle},
+            </if>
+            <if test="sheetName != null">
+                report_sheet_name = #{sheetName},
+            </if>
+            <if test="userIds != null">
+                userids = #{userIds},
+            </if>
+            <if test="reponseCode != null">
+                reponse_code = #{reponseCode},
+            </if>
+            <if test="responseCodeReportServer != null">
+                RESPONSE_CODE_RS = #{responseCodeReportServer},
+            </if>
+            update_time=to_char(sysdate,'yyyymmddhh24miss')
+        </set>
+        WHERE id=#{id}
+    </update>
+
+
+    <update id="updateReportServerUrl" parameterType="Report">
+        update report_order
+        <set>
+            <if test="serverUrl != null">
+                server_url = #{serverUrl} ,
+            </if>
+        </set>
+        WHERE id=#{id}
+    </update>
+
+
+    <select id="selectReportByStatus" parameterType="Integer" resultMap="ReportMap">
+        select * from report_order r where (r.status='02' or r.status='03') and r.reponse_code is null
+          and rownum &lt;= #{rowCount} order by r.create_time
+
+    </select>
+
+    <select id="select_ReportList" parameterType="Report" resultMap="ReportMap">
+        select * from report_order r where 1=1
+        <if test="reportName != null">
+           and r.report_name = #{reportName}
+        </if>
+        <if test="reportPath != null">
+            and r.report_path = #{reportPath}
+        </if>
+        <if test="sql != null">
+            and r.report_sql = #{sql}
+        </if>
+        <if test="status != null">
+            and r.status = #{status}
+        </if>
+        <if test="message != null">
+            and r.report_msg = #{message}
+        </if>
+        <if test="systemId != null">
+            and r.system_id = #{systemId}
+        </if>
+        <if test="reportType != null">
+            and r.report_type = #{reportType}
+        </if>
+        <if test="reportLevel != null">
+            and r.report_level = #{reportLevel}
+        </if>
+        <if test="serverUrl != null">
+            and r.server_url = #{serverUrl}
+        </if>
+        <if test="reportTitle != null">
+            and r.report_title = #{reportTitle}
+        </if>
+        <if test="sheetName != null">
+            and r.report_sheet_name = #{sheetName}
+        </if>
+        <if test="userIds != null">
+            and r.userids = #{userIds}
+        </if>
+        <if test="reponseCode != null">
+            and r.reponse_code = #{reponseCode}
+        </if>
+        <if test="responseCodeReportServer != null">
+            and r.RESPONSE_CODE_RS = #{responseCodeReportServer}
+        </if>
+
+    </select>
+
+</mapper>
